@@ -1,0 +1,17 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+</head>
+<body>
+    <h1>Users</h1>
+    <ul>
+        {% for user in users %}
+            <li>{{ user.name }} - {{ user.age }} - {{ user.phone }}</li>
+            <img src="{{ user.photo }}"/>
+        {% endfor %}
+    </ul>
+</body>
+</html>
