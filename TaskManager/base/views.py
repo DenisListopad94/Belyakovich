@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import Task
 
 
 def home(request):
@@ -7,14 +8,8 @@ def home(request):
 
 
 def tasks(request):
-    tasks = [
-        {'task': 'task 1', 'status': 'started', 'category': 'work'},
-        {'task': 'task 2', 'status': 'started', 'category': 'personal'},
-        {'task': 'task 3', 'status': 'completed', 'category': 'work'},
-        {'task': 'task 4', 'status': 'pending', 'category': 'personal'},
-        {'task': 'task 5', 'status': 'started', 'category': 'work'},
-    ]
-    return render(request, 'tasks.html', {'tasks': tasks})
+
+    return render(request, 'tasks.html', get_tasks())
 
 
 def users(request):
@@ -25,3 +20,13 @@ def users(request):
         {"name": "Eva", "age": 22, "phone": "666-888-9999", 'photo': 'static/john.jpg'}
     ]
     return render(request, 'users.html', {'users': users})
+
+
+def get_tasks():
+    context = {
+        'all': Task.objects.all(),
+        'h_priority': Task.objects.filter(priority='h'),
+        'm_priority': Task.objects.filter(priority='m').exclude(status=''),
+        'start_with': Task.objects.filter(title__startswith='Создать'),
+    }
+    return context

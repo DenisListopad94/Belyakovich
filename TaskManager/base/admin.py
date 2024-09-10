@@ -1,3 +1,12 @@
 from django.contrib import admin
+from base.models import Task, Projects
 
-# Register your models here.
+
+@admin.register(Task)
+class TaskAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Projects)
+class ProjectsAdmin(admin.ModelAdmin):
+    pass
