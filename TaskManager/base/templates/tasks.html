@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks</title>
+</head>
+<body>
+<h1>Все задачи</h1>
+<ul>
+    {% for a in all %}
+        <li>{{ a.title }} - {{ a.description }} - {{ a.status }} - {{ a.priority }}</li>
+    {% endfor %}
+</ul>
+<h1>Все задачи с приоритетом 'h'</h1>
+<ul>
+    {% for h in h_priority%}
+        <li>{{ h.title }}</li>
+    {% endfor %}
+</ul>
+<h1>Все задачи с приоритетом 'm' и имеющим хоть какой-нибудь статус</h1>
+<ul>
+    {% for m in m_priority%}
+        <li>{{ m.title }}</li>
+    {% endfor %}
+</ul>
+<h1>Все задачи в которых title начинается со слова “Создать”</h1>
+<ul>
+    {% for s in start_with%}
+        <li>{{ s.title }}</li>
+    {% endfor %}
+</ul>
+</body>
+</html>
