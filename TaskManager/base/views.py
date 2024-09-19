@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Task
+from .models import Task, User, Comment
 
 
 def home(request):
@@ -30,3 +30,14 @@ def get_tasks():
         'start_with': Task.objects.filter(title__startswith='Создать'),
     }
     return context
+
+
+# Homework 4
+def show_tasks(request):
+    context = {
+        'task_with_tags': Task.objects.filter(tags__isnull=False),
+        'task_without_users': Task.objects.filter(user=None),
+        'users_older_30': User.objects.filter(age__gt=30, locale=None),
+        'comments_with_id': Comment.objects.filter(user_id__in=[1, 4, 5]),
+    }
+    return render(request, 'home_work.html', context=context)
