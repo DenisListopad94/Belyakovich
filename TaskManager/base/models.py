@@ -70,6 +70,8 @@ class Comment(CreatedUpdatedAt):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     comment = models.TextField()
+    photo = models.ImageField(upload_to='com_photo', null=True)
+    files = models.FileField(upload_to='com_files', null=True)
 
     def __str__(self):
         return f'{self.user.last_name} - {self.task.title}'

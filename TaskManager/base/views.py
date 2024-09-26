@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+
+from .forms import TaskForm, CommentForm
 from .models import Task, User, Comment
 
 
@@ -41,3 +43,39 @@ def show_tasks(request):
         'comments_with_id': Comment.objects.filter(user_id__in=[1, 4, 5]),
     }
     return render(request, 'home_work.html', context=context)
+
+
+def new_task(request):
+    context = {}
+    form = TaskForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+    context['form'] = form
+    return render(request, 'new_task.html', context)
+
+
+# def add_comment(request):
+#     context = {}
+#     form = CommentForm(request.POST or None, request.FILES or None)
+#     if form.is_valid():
+#
+#         form.save()
+#     context['form'] = form
+#     return render(request, 'add_comment.html', context)
+
+
+def handle_uploaded_file(f):
+    with open('media_files/com_files/'+f.name, 'wb+') as destination:
+        for chunk in f.chunks():
+            destination.write(chunk)
+
+def add_comment(request):
+    context = {}
+    if request.POST:
+        form = CommentForm(request.POST, request.FILES)
+        if form.is_valid():
+            handle_uploaded_file(request.FILES['files'])
+    else:
+        form = CommentForm()
+    context['form'] = form
+    return render(request, 'add_comment.html', context)
