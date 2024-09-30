@@ -6,10 +6,11 @@
     <title>New_comment</title>
 </head>
 <body>
-    <form enctype="multipart/form-data" method="post">
+    <form enctype="multipart/form-data" method="POST">
         {% csrf_token %}
         {{ form | crispy }}
-        <button type="submit" class="btn btn-primary"> New Comment</button>
+
+        <input type="submit" value="OK"
     </form>
 </body>
 </html>
