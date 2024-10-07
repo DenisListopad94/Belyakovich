@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tasks</title>
+</head>
+<body>
+<h1>Все задачи у которых есть теги</h1>
+<ul>
+    {% for twt in task_with_tags %}
+        <li>{{ twt.title }} - {{ twt.description }} - {{ twt.status }} - {{ twt.priority }} - {{ twt.tags }}</li>
+    {% endfor %}
+</ul>
+<h1>Все задачи у которых нет владельцев.</h1>
+<ul>
+    {% for twu in task_without_users%}
+        <li>{{ twu.title }} - {{ twu.description }} - {{ twu.status }} - {{ twu.priority }}</li>
+    {% endfor %}
+</ul>
+<h1>Все пользователи старше 30, у которых поле locale = NULL</h1>
+<ul>
+    {% for uo in users_older_30%}
+        <li>{{ uo.first_name }} - {{ uo.last_name }} - {{ uo.age }}</li>
+    {% endfor %}
+</ul>
+<h1>Все комментарии пользователя с id 1,4,5</h1>
+<ul>
+    {% for cwi in comments_with_id%}
+        <li>{{ cwi.comment }}</li>
+    {% endfor %}
+</ul>
+</body>
+</html>
