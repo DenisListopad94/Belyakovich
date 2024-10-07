@@ -1,5 +1,8 @@
+from functools import lru_cache
+
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.views.decorators.cache import cache_page
 
 from .forms import TaskForm, CommentForm
 from .models import Task, User, Comment
@@ -24,6 +27,7 @@ def users(request):
     return render(request, 'users.html', {'users': users})
 
 
+@cache_page(60*30)
 def get_tasks():
     context = {
         'all': Task.objects.all(),
@@ -35,6 +39,7 @@ def get_tasks():
 
 
 # Homework 4
+@cache_page(60*30)
 def show_tasks(request):
     context = {
         'task_with_tags': Task.objects.filter(tags__isnull=False),
@@ -69,6 +74,7 @@ def handle_uploaded_file(f):
         for chunk in f.chunks():
             destination.write(chunk)
 
+
 def add_comment(request):
     context = {}
     if request.POST:
@@ -79,3 +85,16 @@ def add_comment(request):
         form = CommentForm()
     context['form'] = form
     return render(request, 'add_comment.html', context)
+
+
+# Функция, которая рекурсивно считает сумму положительных чисел списка
+@lru_cache(maxsize=None)
+def sum_positive(lst):
+    if len(lst) == 0:
+        return 0
+    else:
+        num = lst[0]
+        if num > 0:
+            return num + sum_positive(lst[1:])
+        else:
+            return sum_positive(list[1:])
