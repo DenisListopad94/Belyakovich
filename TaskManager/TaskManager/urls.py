@@ -20,6 +20,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from base import views
+from rest_api.views import UserList
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +31,8 @@ urlpatterns = [
     path('homework/', views.show_tasks, name='show_tasks'),
     path('new_task/', views.new_task, name='new_task'),
     path('new_com/', views.add_comment, name='add_comment'),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api/', include('rest_api.urls')),
 ]
 
 if settings.DEBUG:
