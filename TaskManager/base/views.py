@@ -3,6 +3,7 @@ from functools import lru_cache
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.cache import cache_page
+from django.views.generic import TemplateView
 
 from .forms import TaskForm, CommentForm
 from .models import Task, User, Comment
@@ -12,34 +13,42 @@ def home(request):
     return HttpResponse("Welcome to our task management site")
 
 
-def tasks(request):
+class TasksView(TemplateView):
+    template_name = 'tasks.html'
 
-    return render(request, 'tasks.html', get_tasks())
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(self.get_tasks())
+        return context
+
+    def get_tasks(self):
+        return {
+            'all': Task.objects.all(),
+            'h_priority': Task.objects.filter(priority='h'),
+            'm_priority': Task.objects.filter(priority='m').exclude(status=''),
+            'start_with': Task.objects.filter(title__startswith='Создать'),
+        }
 
 
-def users(request):
-    users = [
-        {"name": "John", "age": 25, "phone": "123-456-7890", 'photo': 'john.jpg'},
-        {"name": "Alice", "age": 30, "phone": "987-654-3210", 'photo': 'static/john.jpg'},
-        {"name": "Bob", "age": 28, "phone": "555-123-4567", 'photo': 'static/john.jpg'},
-        {"name": "Eva", "age": 22, "phone": "666-888-9999", 'photo': 'static/john.jpg'}
-    ]
-    return render(request, 'users.html', {'users': users})
+class UsersView(TemplateView):
+    template_name = 'users.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['users'] = self.get_users()
+        return context
 
-@cache_page(60*30)
-def get_tasks():
-    context = {
-        'all': Task.objects.all(),
-        'h_priority': Task.objects.filter(priority='h'),
-        'm_priority': Task.objects.filter(priority='m').exclude(status=''),
-        'start_with': Task.objects.filter(title__startswith='Создать'),
-    }
-    return context
+    def get_users(self):
+        return [
+            {"name": "John", "age": 25, "phone": "123-456-7890", 'photo': 'john.jpg'},
+            {"name": "Alice", "age": 30, "phone": "987-654-3210", 'photo': 'static/john.jpg'},
+            {"name": "Bob", "age": 28, "phone": "555-123-4567", 'photo': 'static/john.jpg'},
+            {"name": "Eva", "age": 22, "phone": "666-888-9999", 'photo': 'static/john.jpg'}
+        ]
 
 
 # Homework 4
-@cache_page(60*30)
+@cache_page(60 * 30)
 def show_tasks(request):
     context = {
         'task_with_tags': Task.objects.filter(tags__isnull=False),
@@ -70,7 +79,7 @@ def new_task(request):
 
 
 def handle_uploaded_file(f):
-    with open('media_files/com_files/'+f.name, 'wb+') as destination:
+    with open('media_files/com_files/' + f.name, 'wb+') as destination:
         for chunk in f.chunks():
             destination.write(chunk)
 
