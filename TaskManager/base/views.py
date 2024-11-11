@@ -1,5 +1,6 @@
 from functools import lru_cache
 
+from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.cache import cache_page
@@ -59,6 +60,8 @@ def show_tasks(request):
     return render(request, 'home_work.html', context=context)
 
 
+@login_required
+@permission_required('base.add_task', raise_exception=True)
 def new_task(request):
     context = {}
     form = TaskForm(request.POST or None, request.FILES or None)
