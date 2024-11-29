@@ -1,5 +1,6 @@
 import datetime
 from base.models import Comment, SEX, User, Task, Project, STATUS_CHOICES, PRIORITY_CHOICES, Tag, Attachment
+from rest_api.models import UniqueQueue
 
 from rest_framework import serializers
 
@@ -70,3 +71,7 @@ class AttachmentSerializer(serializers.Serializer):
         instance.user = validated_data.get('user', instance.user)
         instance.save()
         return instance
+
+
+class UniqueQueueSerializer(serializers.Serializer):
+    element = serializers.CharField(max_length=255)

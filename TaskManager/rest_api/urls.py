@@ -1,6 +1,5 @@
 from django.urls import path, include
-from rest_api.views import UserList, UserDetail, TaskViewSet, CommentViewSet, AttachmentViewSet, TaskListView, \
-    TaskDetailView, TaskCreateView, CommentListView, CommentDeleteView
+from rest_api.views import *
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -16,6 +15,11 @@ urlpatterns = [
     path('taskslist/<int:pk>/', TaskDetailView.as_view(), name='task-detail'),
     path('taskslist/create', TaskCreateView.as_view(), name='task-create'),
     path('commentlist/', CommentListView.as_view(), name='comments-list'),
-    path('commentlist/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment-delete')
+    path('commentlist/<int:pk>/delete/', CommentDeleteView.as_view(), name='comment-delete'),
+    path('queue/add/', add_to_queue, name='add_to_queue'),
+    path('queue/', view_queue, name='view_queue'),
+    path('queue/pop/', pop_from_queue, name='pop_from_queue'),
+    path('queue/length/', get_queue_length, name='get_queue_length'),
+    path('queue/last/', get_last_element, name='get_last_element'),
 ]
 
